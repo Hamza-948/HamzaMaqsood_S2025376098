@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Assignment Solutions — Hamza Maqsood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg: #050b14;
+  --surface: #0c1525;
+  --surface-elevated: #162033;
+  --border: #1a2d47;
+  --border-bright: #0ea5e9;
+  --text-primary: #e8ecf1;
+  --text-secondary: #8b9cb5;
+  --text-tertiary: #4a6285;
+  --accent: #0ea5e9;
+  --accent-secondary: #3b82f6;
+  --code-bg: #0a0e1a;
+  --code-border: #1a2540;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --sidebar-width: 260px;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+.nav-item:hover {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+}
+.nav-item.active {
+  background: rgba(14, 165, 233, 0.06);
+  color: var(--accent);
+  border-left: 3px solid var(--accent);
+  padding-left: 13px;
+}
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  z-index: 200;
+  width: 40px; height: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+.section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(14,165,233,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('images/hero-bg.jpg') center/cover no-repeat;
+  opacity: 0.15;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 1px solid #1e3a5f;
+  background: var(--surface);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: var(--accent);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 1;
+}
+.hero-title-gradient {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+.student-card {
+  display: flex;
+  gap: 48px;
+  margin-top: 48px;
+  padding: 24px 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+}
+.student-col {
+  text-align: left;
+}
+.student-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+.student-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.section-title span {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.title-underline {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  border-radius: 2px;
+  margin-bottom: 40px;
+}
+
+/* ===== THEORY CARDS ===== */
+.theory-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.card-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.card-body code {
+  background: #111d33;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+/* ===== INFOGRAPHIC IMAGES ===== */
+.infographic-img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ===== ARRAY MEMORY GRID ===== */
+.memory-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 32px 0 8px;
+}
+.memory-section-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.formula-bar {
+  text-align: center;
+  font-family: 'Fira Code', monospace;
+  background: #111d33;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.memory-grid {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.memory-cell {
+  width: 80px;
+  height: 90px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 300ms ease;
+  cursor: pointer;
+}
+.memory-cell:hover {
+  border-color: var(--accent);
+  background: var(--surface-elevated);
+  box-shadow: 0 0 20px rgba(14,165,233,0.15);
+  transform: scale(1.05);
+}
+.cell-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.cell-addr {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  font-family: 'Fira Code', monospace;
+}
+.cell-index {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* ===== CODE BLOCKS ===== */
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111d33;
+  padding: 12px 20px;
+  border-radius: 12px 12px 0 0;
+}
+.code-dots {
+  display: flex;
+  gap: 6px;
+  margin-right: 12px;
+}
+.code-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.code-dot.red { background: var(--danger); }
+.code-dot.yellow { background: var(--warning); }
+.code-dot.green { background: var(--success); }
+.code-filename {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.code-header-left {
+  display: flex;
+  align-items: center;
+}
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 200ms;
+}
+.copy-btn:hover { color: var(--text-primary); }
+.code-block {
+  background: var(--code-bg);
+  padding: 20px;
+  border-radius: 0 0 12px 12px;
+  overflow-x: auto;
+  border: 1px solid var(--code-border);
+  border-top: none;
+}
+.code-block pre {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin: 0;
+}
+/* Syntax highlighting colors */
+.syntax-comment { color: #4a6285; }
+.syntax-keyword { color: #c678dd; }
+.syntax-function { color: #61afef; }
+.syntax-string { color: #98c379; }
+.syntax-number { color: #d19a66; }
+.syntax-type { color: #e5c07b; }
+.syntax-operator { color: #56b6c2; }
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 20px 0;
+}
+.tab-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+}
+.tab-btn:hover {
+  background: var(--surface-elevated);
+}
+.tab-btn.active {
+  background: rgba(14,165,233,0.12);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ===== TABLE ===== */
+.table-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.table-row {
+  display: grid;
+  grid-template-columns: 120px 100px 1fr;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  align-items: center;
+}
+.table-row.header {
+  background: #111d33;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+.complexity-best { color: var(--success); font-weight: 600; }
+.complexity-avg { color: var(--warning); font-weight: 600; }
+.complexity-worst { color: var(--danger); font-weight: 600; }
+
+/* ===== BUBBLE SORT VISUALIZATION ===== */
+.viz-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.viz-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.viz-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  height: 200px;
+  margin-bottom: 20px;
+}
+.bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.bar {
+  width: 40px;
+  border-radius: 6px 6px 0 0;
+  transition: all 500ms ease;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.bar.unsorted { background: var(--accent-secondary); }
+.bar.comparing { background: var(--warning); }
+.bar.swapping { background: var(--danger); }
+.bar.sorted { background: var(--success); }
+.bar-index {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+.viz-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.btn-primary {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #050b14;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: #38bdf8; }
+.btn-secondary {
+  padding: 10px 20px;
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-secondary:hover { background: #1a2d47; }
+.viz-stats {
+  margin-left: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 24px;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+/* ===== BINARY SEARCH VISUALIZATION ===== */
+.bs-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.bs-input-row label {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.bs-input-row input {
+  width: 80px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  outline: none;
+}
+.bs-input-row input:focus { border-color: var(--accent); }
+.bs-cells {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.bs-cell {
+  width: 64px;
+  padding: 14px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  transition: all 400ms ease;
+}
+.bs-cell .bs-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.bs-cell .bs-index {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+.bs-cell.low { border-color: var(--success); background: rgba(16,185,129,0.12); }
+.bs-cell.high { border-color: var(--danger); background: rgba(239,68,68,0.12); }
+.bs-cell.mid { border-color: var(--accent); background: rgba(14,165,233,0.18); }
+.bs-cell.found { background: var(--success); }
+.bs-cell.found .bs-value { color: #050b14; }
+.bs-cell.eliminated { opacity: 0.3; }
+
+/* ===== SPEED COMPARISON BARS ===== */
+.speed-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 32px 0 8px;
+}
+.speed-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.speed-label {
+  width: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+}
+.speed-desc {
+  width: 100px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.speed-bar-track {
+  flex: 1;
+  height: 28px;
+  background: var(--surface);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.speed-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 800ms ease;
+}
+.speed-bar-fill.c1 { width: 8%; background: var(--success); }
+.speed-bar-fill.clogn { width: 20%; background: linear-gradient(90deg, var(--success), var(--accent)); }
+.speed-bar-fill.cn { width: 40%; background: var(--accent); }
+.speed-bar-fill.cnlogn { width: 65%; background: linear-gradient(90deg, var(--accent), var(--warning)); }
+.speed-bar-fill.cn2 { width: 100%; background: linear-gradient(90deg, var(--warning), var(--danger)); }
+.speed-rule {
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  margin-top: 16px;
+}
+
+/* ===== LINKED LIST ===== */
+.ll-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.ll-display {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-height: 120px;
+  overflow-x: auto;
+}
+.ll-head-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+.ll-node {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  animation: nodeIn 400ms ease;
+}
+@keyframes nodeIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.ll-node-data {
+  width: 60px;
+  height: 50px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+.ll-node-next {
+  width: 44px;
+  height: 50px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--accent);
+}
+.ll-node-next.null { color: var(--text-tertiary); }
+.ll-arrow {
+  margin: 0 12px;
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+.ll-null-label {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  font-family: 'Fira Code', monospace;
+}
+
+/* ===== COMPLETE PROGRAM ===== */
+.cp-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.cp-filename {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #111d33;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: background 200ms;
+}
+.collapsible-header:hover { background: #1a2d47; }
+.collapsible-header .chevron {
+  transition: transform 200ms;
+  color: var(--accent);
+  font-size: 0.875rem;
+}
+.collapsible-header.active .chevron { transform: rotate(90deg); }
+.collapsible-header span {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 400ms ease;
+}
+.collapsible-body.open {
+  max-height: 5000px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 40px;
+  margin-left: var(--sidebar-width);
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1023px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 300ms ease;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .menu-toggle { display: flex; }
+  .main-content { margin-left: 0; }
+  .footer { margin-left: 0; }
+  .section { padding: 60px 24px; }
+  .hero { min-height: 60vh; }
+  .student-card { gap: 32px; padding: 20px 24px; }
+}
+@media (max-width: 767px) {
+  .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
+  .student-card { flex-direction: column; gap: 16px; }
+  .bar { width: 32px; }
+  .memory-cell { width: 64px; height: 80px; }
+  .bs-cell { width: 50px; padding: 10px 4px; }
+  .speed-label { width: 70px; font-size: 0.75rem; }
+  .speed-desc { width: 80px; font-size: 0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== MOBILE MENU TOGGLE ===== -->
+<button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-label">Table of Contents</div>
+  <nav class="sidebar-nav">
+    <a href="#home" class="nav-item active" data-section="home">Home</a>
+    <a href="#arrays-memory" class="nav-item" data-section="arrays-memory">1. Arrays &amp; Memory</a>
+    <a href="#bubble-sort" class="nav-item" data-section="bubble-sort">2. Bubble Sort</a>
+    <a href="#binary-search" class="nav-item" data-section="binary-search">3. Binary Search</a>
+    <a href="#complexity-analysis" class="nav-item" data-section="complexity-analysis">4. Complexity Analysis</a>
+    <a href="#linked-list" class="nav-item" data-section="linked-list">5. Linked List</a>
+    <a href="#complete-program" class="nav-item" data-section="complete-program">6. Complete Program</a>
+  </nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+
+  <!-- ===== HERO ===== -->
+  <section class="section hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">CC213 — Data Structures &amp; Algorithms</div>
+    <h1 class="hero-title">DSA Assignment<br><span class="hero-title-gradient">Solutions</span></h1>
+    <p class="hero-subtitle">Complete solutions with theory, code &amp; visualizations</p>
+    <div class="student-card">
+      <div class="student-col">
+        <div class="student-label">Student Name</div>
+        <div class="student-value">Hamza Maqsood</div>
+      </div>
+      <div class="student-col">
+        <div class="student-label">Student ID</div>
+        <div class="student-value">S2025376098</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 1: ARRAYS & MEMORY ===== -->
+  <section class="section" id="arrays-memory">
+    <h2 class="section-title">Question 1 — <span>Arrays &amp; Memory</span></h2>
+    <div class="title-underline"></div>
+
+    <!-- Q1.A.1 -->
+    <div class="theory-card">
+      <div class="card-title">Q1.A.1 — Contiguous Memory</div>
+      <div class="card-body">
+        Contiguous memory means data is stored in one single block, side by side. Arrays use this because if you know where the first item is, you can find any item using simple math (base address + index). This gives <code>O(1)</code> access time — super fast.
+      </div>
+    </div>
+
+    <!-- Q1.A.2 -->
+    <div class="theory-card">
+      <div class="card-title">Q1.A.2 — Memory Leaks</div>
+      <div class="card-body">
+        A memory leak happens when you take memory from the system but forget to give it back. Example: you use <code>new int[100]</code> in a function but never call <code>delete[]</code>. The memory stays locked but you lost the address.
+      </div>
+    </div>
+
+    <!-- Q1.A.3 -->
+    <div class="theory-card">
+      <div class="card-title">Q1.A.3 — Static vs. Dynamic Arrays</div>
+      <div class="card-body">
+        Static arrays have a fixed size set when you write the code. Dynamic arrays can change size while the program runs using <code>new</code>. Fixed size matters because if the array is full, you cannot add more data.
+      </div>
+    </div>
+
+    <!-- Q1.A.4 -->
+    <div class="theory-card">
+      <div class="card-title">Q1.A.4 — Why Array Access is O(1)</div>
+      <div class="card-body">
+        Array access is <code>O(1)</code> because of direct math: <code>address = base + (index × size)</code>. The CPU calculates the address and jumps directly. Linked Lists don't do this — nodes are scattered in memory, so you must walk one by one from the head. That's <code>O(n)</code>.
+      </div>
+    </div>
+
+    <!-- Array Memory Layout Visualization -->
+    <div class="memory-section-title">Array Memory Layout</div>
+    <div class="memory-section-subtitle">Hover over cells to see how the address is calculated. Each cell is 4 bytes (int size).</div>
+    <div class="formula-bar">address = base + (index × sizeof(int))</div>
+    <div class="memory-grid" id="memoryGrid">
+      <!-- Generated by JS -->
+    </div>
+
+    <!-- Array vs Linked List Infographic -->
+    <img src="images/array-vs-linkedlist.jpg" alt="Array vs Linked List Memory Layout" class="infographic-img">
+
+    <!-- Implementation Tabs -->
+    <div style="margin-top:48px;">
+      <div style="font-size:1.25rem;font-weight:700;color:var(--text-primary);margin-bottom:16px;">Implementation</div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'linear')">Linear Search</button>
+        <button class="tab-btn" onclick="switchTab(this,'maxmin')">Max/Min</button>
+      </div>
+      <div id="code-linear">
+        <div class="code-header">
+          <div class="code-header-left">
+            <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+            <span class="code-filename">linear_search.cpp</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+        </div>
+        <div class="code-block"><pre><span class="syntax-comment">// Linear Search — O(n) time complexity</span>
+<span class="syntax-keyword">int</span> <span class="syntax-function">linearSearch</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> key) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; size; i++) {
+        <span class="syntax-keyword">if</span> (arr[i] == key) {
+            <span class="syntax-keyword">return</span> i;  <span class="syntax-comment">// found at index i</span>
+        }
+    }
+    <span class="syntax-keyword">return</span> -<span class="syntax-number">1</span>;  <span class="syntax-comment">// not found</span>
+}</pre></div>
+      </div>
+      <div id="code-maxmin" style="display:none;">
+        <div class="code-header">
+          <div class="code-header-left">
+            <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+            <span class="code-filename">max_min.cpp</span>
+          </div>
+          <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+        </div>
+        <div class="code-block"><pre><span class="syntax-comment">// Find max and min using one loop only</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">findMaxMin</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> &amp;maxVal, <span class="syntax-keyword">int</span> &amp;minVal) {
+    maxVal = arr[<span class="syntax-number">0</span>];
+    minVal = arr[<span class="syntax-number">0</span>];
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">1</span>; i &lt; size; i++) {
+        <span class="syntax-keyword">if</span> (arr[i] &gt; maxVal) maxVal = arr[i];
+        <span class="syntax-keyword">if</span> (arr[i] &lt; minVal) minVal = arr[i];
+    }
+}</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 2: BUBBLE SORT ===== -->
+  <section class="section" id="bubble-sort">
+    <h2 class="section-title">Question 2 — <span>Bubble Sort</span></h2>
+    <div class="title-underline"></div>
+
+    <!-- Q2.A.1 -->
+    <div class="theory-card">
+      <div class="card-title">Q2.A.1 — How Bubble Sort Works</div>
+      <div class="card-body">
+        Bubble Sort compares two side-by-side numbers. If they are in wrong order, it swaps them. In each pass, the largest unsorted number "bubbles up" to its correct position at the end. It's called Bubble Sort because smaller numbers slowly bubble their way to the top.
+      </div>
+    </div>
+
+    <!-- Q2.A.2 -->
+    <div class="theory-card">
+      <div class="card-title">Q2.A.2 — Time Complexity</div>
+      <div class="card-body">
+        Best case <code>O(n)</code> — when array is already sorted and we use a flag to stop early. Average and worst case <code>O(n²)</code>. Without the optimization flag, even a sorted array takes <code>O(n²)</code>. With the flag, it becomes <code>O(n)</code> because we stop after one pass if no swaps happen.
+      </div>
+    </div>
+
+    <!-- Q2.A.3 -->
+    <div class="theory-card">
+      <div class="card-title">Q2.A.3 — Bubble Sort vs. Selection Sort</div>
+      <div class="card-body">
+        Selection Sort is generally preferred because it does at most n swaps total. Bubble Sort can do up to n² swaps. Use Bubble Sort when data is nearly sorted or when you need a stable sort (keeps equal elements in their original order).
+      </div>
+    </div>
+
+    <!-- Time Complexity Table -->
+    <div style="font-size:1.25rem;font-weight:700;color:var(--text-primary);margin-top:32px;margin-bottom:16px;">Time Complexity</div>
+    <div class="table-container">
+      <div class="table-row header">
+        <div>Case</div><div>Complexity</div><div>Notes</div>
+      </div>
+      <div class="table-row">
+        <div>Best Case</div><div class="complexity-best">O(n)</div><div>Array already sorted; optimization flag stops after one pass</div>
+      </div>
+      <div class="table-row">
+        <div>Average Case</div><div class="complexity-avg">O(n²)</div><div>Random input order</div>
+      </div>
+      <div class="table-row">
+        <div>Worst Case</div><div class="complexity-worst">O(n²)</div><div>Array sorted in reverse order</div>
+      </div>
+    </div>
+
+    <!-- Bubble Sort Visualization -->
+    <div class="viz-container">
+      <div class="viz-title">Bubble Sort Visualization</div>
+      <div class="viz-subtitle">Watch how Bubble Sort compares neighbors and pushes the largest element to the end each pass.</div>
+      <div class="bar-chart" id="bubbleChart">
+        <!-- Generated by JS -->
+      </div>
+      <div class="viz-controls">
+        <button class="btn-primary" id="bubblePlay" onclick="playBubbleSort()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          Play Sort
+        </button>
+        <button class="btn-secondary" onclick="resetBubbleSort()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          Reset
+        </button>
+        <div class="viz-stats">
+          <span>Pass: <span id="bubblePass">0</span></span>
+          <span>Swaps: <span id="bubbleSwaps">0</span></span>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-secondary)"></div> Unsorted</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div> Comparing</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div> Swapping</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div> Sorted</div>
+      </div>
+    </div>
+
+    <!-- Code Block -->
+    <div style="margin-top:24px;">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">bubble_sort.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Bubble Sort with early termination optimization</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">bubbleSort</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> &amp;swapCount) {
+    swapCount = <span class="syntax-number">0</span>;
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; size - <span class="syntax-number">1</span>; i++) {
+        <span class="syntax-keyword">bool</span> swapped = <span class="syntax-keyword">false</span>;
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; size - <span class="syntax-number">1</span> - i; j++) {
+            <span class="syntax-keyword">if</span> (arr[j] &gt; arr[j + <span class="syntax-number">1</span>]) {
+                <span class="syntax-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="syntax-number">1</span>];
+                arr[j + <span class="syntax-number">1</span>] = temp;
+                swapCount++;
+                swapped = <span class="syntax-keyword">true</span>;
+            }
+        }
+        <span class="syntax-keyword">if</span> (!swapped) <span class="syntax-keyword">break</span>;
+    }
+}</pre></div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 3: BINARY SEARCH ===== -->
+  <section class="section" id="binary-search">
+    <h2 class="section-title">Question 3 — <span>Binary Search</span></h2>
+    <div class="title-underline"></div>
+
+    <!-- Q3.A.1 -->
+    <div class="theory-card">
+      <div class="card-title">Q3.A.1 — Prerequisite for Binary Search</div>
+      <div class="card-body">
+        The array must be <strong>sorted</strong>. This matters because Binary Search looks at the middle element and decides whether to search the left half or right half. If the array isn't sorted, this decision makes no sense and gives wrong results.
+      </div>
+    </div>
+
+    <!-- Q3.A.2 -->
+    <div class="theory-card">
+      <div class="card-title">Q3.A.2 — Dry Run with key = 23</div>
+      <div class="card-body">
+        Array: <code>{2, 5, 8, 12, 16, 23, 38, 45}</code><br><br>
+        <strong>Step 1:</strong> low=0, high=7, mid=3, arr[3]=12. 23 &gt; 12, so we search right. low becomes 4.<br>
+        <strong>Step 2:</strong> low=4, high=7, mid=5, arr[5]=23. <strong>Found at index 5!</strong>
+      </div>
+    </div>
+
+    <!-- Q3.A.3 -->
+    <div class="theory-card">
+      <div class="card-title">Q3.A.3 — Why Binary Search is Faster</div>
+      <div class="card-body">
+        Binary Search is <code>O(log n)</code>, Linear Search is <code>O(n)</code>. Binary Search cuts the problem in half each time. For 1 million items, Binary Search needs ~20 steps. Linear Search might need 1 million. That's the difference between instant and waiting.
+      </div>
+    </div>
+
+    <!-- Binary Search Visualization -->
+    <div class="viz-container">
+      <div class="viz-title">Binary Search Visualization</div>
+      <div class="viz-subtitle">Watch how Binary Search cuts the array in half each step. Green = low, Red = high, Cyan = mid.</div>
+      <div class="bs-input-row">
+        <label>Key:</label>
+        <input type="number" id="bsKey" value="23" min="0">
+        <button class="btn-primary" onclick="playBinarySearch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          Search
+        </button>
+        <button class="btn-secondary" onclick="resetBinarySearch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          Reset
+        </button>
+        <div class="viz-stats" style="margin-left:auto;">
+          <span>Iterations: <span id="bsIterations">0</span></span>
+        </div>
+      </div>
+      <div class="bs-cells" id="bsCells">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+
+    <!-- Code Block -->
+    <div style="margin-top:24px;">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">binary_search.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Iterative Binary Search — O(log n)</span>
+<span class="syntax-keyword">int</span> <span class="syntax-function">binarySearch</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> key, <span class="syntax-keyword">int</span> &amp;iterations) {
+    <span class="syntax-keyword">int</span> low = <span class="syntax-number">0</span>;
+    <span class="syntax-keyword">int</span> high = size - <span class="syntax-number">1</span>;
+    iterations = <span class="syntax-number">0</span>;
+    <span class="syntax-keyword">while</span> (low &lt;= high) {
+        iterations++;
+        <span class="syntax-keyword">int</span> mid = low + (high - low) / <span class="syntax-number">2</span>;
+        <span class="syntax-keyword">if</span> (arr[mid] == key) {
+            <span class="syntax-keyword">return</span> mid;  <span class="syntax-comment">// found</span>
+        } <span class="syntax-keyword">else if</span> (arr[mid] &lt; key) {
+            low = mid + <span class="syntax-number">1</span>;  <span class="syntax-comment">// search right half</span>
+        } <span class="syntax-keyword">else</span> {
+            high = mid - <span class="syntax-number">1</span>;  <span class="syntax-comment">// search left half</span>
+        }
+    }
+    <span class="syntax-keyword">return</span> -<span class="syntax-number">1</span>;  <span class="syntax-comment">// not found</span>
+}</pre></div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 4: COMPLEXITY ANALYSIS ===== -->
+  <section class="section" id="complexity-analysis">
+    <h2 class="section-title">Question 4 — <span>Complexity Analysis</span></h2>
+    <div class="title-underline"></div>
+
+    <!-- Q4.A.1 -->
+    <div class="theory-card">
+      <div class="card-title">Q4.A.1 — What is Big O</div>
+      <div class="card-body">
+        Big O tells us how much an algorithm's work grows when input gets bigger. We don't use seconds because that depends on the computer. Big O describes the growth pattern, which is the same on any machine.
+      </div>
+    </div>
+
+    <!-- Q4.A.2 -->
+    <div class="theory-card">
+      <div class="card-title">Q4.A.2 — Big O, Omega, Theta</div>
+      <div class="card-body">
+        Think of waiting for a bus. <strong>Big O</strong> (worst case): "Bus comes in 30 min max." <strong>Big Omega</strong> (best case): "Bus could come in 2 min." <strong>Big Theta</strong> (tight bound): "Bus always comes in 10-15 min." Theta means we know both upper and lower bounds are the same.
+      </div>
+    </div>
+
+    <!-- Q4.A.3 -->
+    <div class="theory-card">
+      <div class="card-title">Q4.A.3 — Ranking (Fastest to Slowest)</div>
+      <div class="card-body">
+        <strong style="color:var(--text-primary);"><code>O(1)</code> &gt; <code>O(log n)</code> &gt; <code>O(n)</code> &gt; <code>O(n log n)</code> &gt; <code>O(n²)</code></strong><br><br>
+        Constant is fastest. Quadratic is slowest. For large inputs, even a small difference in Big O matters a lot.
+      </div>
+    </div>
+
+    <!-- Q4.A.4 -->
+    <div class="theory-card">
+      <div class="card-title">Q4.A.4 — Space Complexity</div>
+      <div class="card-body">
+        Space complexity is how much extra memory an algorithm needs. If a function creates a temporary array of size n, its space complexity is <code>O(n)</code> because the memory used grows directly with input size.
+      </div>
+    </div>
+
+    <!-- Q4.A.5 -->
+    <div class="theory-card">
+      <div class="card-title">Q4.A.5 — Faster Computer Myth</div>
+      <div class="card-body">
+        Wrong. A fast computer helps for small inputs. But when n gets really big, <code>O(n log n)</code> will always beat <code>O(n²)</code> because n² grows much faster. Computer speed cannot fix bad algorithm growth. This is called <strong>asymptotic analysis</strong>.
+      </div>
+    </div>
+
+    <!-- Complexity Chart Infographic -->
+    <img src="images/complexity-chart.jpg" alt="Big O Complexity Comparison Chart" class="infographic-img">
+
+    <!-- Speed Comparison Bars -->
+    <div class="speed-section-title">Speed Comparison — Fastest to Slowest</div>
+    <div class="memory-section-subtitle">How each complexity grows as input size increases. Shorter bar = faster.</div>
+    <div class="speed-bar-row">
+      <div class="speed-label">O(1)</div>
+      <div class="speed-desc">Constant</div>
+      <div class="speed-bar-track"><div class="speed-bar-fill c1"></div></div>
+    </div>
+    <div class="speed-bar-row">
+      <div class="speed-label">O(log n)</div>
+      <div class="speed-desc">Logarithmic</div>
+      <div class="speed-bar-track"><div class="speed-bar-fill clogn"></div></div>
+    </div>
+    <div class="speed-bar-row">
+      <div class="speed-label">O(n)</div>
+      <div class="speed-desc">Linear</div>
+      <div class="speed-bar-track"><div class="speed-bar-fill cn"></div></div>
+    </div>
+    <div class="speed-bar-row">
+      <div class="speed-label">O(n log n)</div>
+      <div class="speed-desc">Linearithmic</div>
+      <div class="speed-bar-track"><div class="speed-bar-fill cnlogn"></div></div>
+    </div>
+    <div class="speed-bar-row">
+      <div class="speed-label">O(n²)</div>
+      <div class="speed-desc">Quadratic</div>
+      <div class="speed-bar-track"><div class="speed-bar-fill cn2"></div></div>
+    </div>
+    <div class="speed-rule">Rule of thumb: For large n, always prefer the algorithm with the slowest-growing complexity.</div>
+
+    <!-- Code Examples -->
+    <div style="margin-top:48px;">
+      <div style="font-size:1.25rem;font-weight:700;color:var(--text-primary);margin-bottom:16px;">Code Examples</div>
+
+      <!-- nested_loop.cpp -->
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">nested_loop.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Time Complexity: O(n²)</span>
+<span class="syntax-comment">// Outer loop runs n times. Inner loop runs n times for each outer iteration.</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">nestedLoop</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++) {      <span class="syntax-comment">// n times</span>
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; n; j++) {  <span class="syntax-comment">// n times</span>
+            <span class="syntax-comment">// some constant work     // 1 operation</span>
+        }
+    }
+}</pre></div>
+
+      <!-- single_loop.cpp -->
+      <div class="code-header" style="margin-top:20px;">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">single_loop.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Time Complexity: O(n)</span>
+<span class="syntax-comment">// Single loop runs n times.</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">singleLoop</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++) {  <span class="syntax-comment">// n times</span>
+        <span class="syntax-comment">// some constant work         // 1 operation</span>
+    }
+}</pre></div>
+
+      <!-- all_elements_exist.cpp -->
+      <div class="code-header" style="margin-top:20px;">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">all_elements_exist.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Check if all elements of A exist in B</span>
+<span class="syntax-comment">// Time Complexity: O(n²)</span>
+<span class="syntax-comment">// Better approach: sort B(O(n log n)), then binary search each A element.</span>
+<span class="syntax-comment">// Best approach: use a hash set for O(n) total time.</span>
+<span class="syntax-keyword">bool</span> <span class="syntax-function">allElementsExist</span>(<span class="syntax-keyword">int</span> A[], <span class="syntax-keyword">int</span> B[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++) {
+        <span class="syntax-keyword">bool</span> found = <span class="syntax-keyword">false</span>;
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; n; j++) {
+            <span class="syntax-keyword">if</span> (A[i] == B[j]) {
+                found = <span class="syntax-keyword">true</span>;
+                <span class="syntax-keyword">break</span>;
+            }
+        }
+        <span class="syntax-keyword">if</span> (!found) <span class="syntax-keyword">return</span> <span class="syntax-keyword">false</span>;
+    }
+    <span class="syntax-keyword">return</span> <span class="syntax-keyword">true</span>;
+}</pre></div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 5: SINGLY LINKED LIST ===== -->
+  <section class="section" id="linked-list">
+    <h2 class="section-title">Question 5 — <span>Singly Linked List</span></h2>
+    <div class="title-underline"></div>
+
+    <!-- Q5.A.1 -->
+    <div class="theory-card">
+      <div class="card-title">Q5.A.1 — What is a Singly Linked List</div>
+      <div class="card-body">
+        A Singly Linked List is a chain of nodes where each node holds data and a pointer to the next node. It's like a treasure hunt — each clue points to the next one. Arrays store everything in one continuous block (like a row of lockers), but linked lists store nodes scattered around memory, connected by pointers.
+      </div>
+    </div>
+
+    <!-- Q5.A.2 -->
+    <div class="theory-card">
+      <div class="card-title">Q5.A.2 — Time Complexities</div>
+      <div class="card-body">
+        <strong>Insert at head:</strong> <code>O(1)</code> — just create a node and update the head pointer.<br>
+        <strong>Insert at tail:</strong> <code>O(n)</code> — must walk through all nodes to reach the end.<br>
+        <strong>Delete by value:</strong> <code>O(n)</code> — must search through nodes to find the value first.
+      </div>
+    </div>
+
+    <!-- Q5.A.3 -->
+    <div class="theory-card">
+      <div class="card-title">Q5.A.3 — Memory Leak in Linked Lists</div>
+      <div class="card-body">
+        If you remove a node without calling <code>delete</code> on it, that memory stays allocated but you can never use it again. This is called a <strong>memory leak</strong>. Always call <code>delete</code> on the node before removing it from the list.
+      </div>
+    </div>
+
+    <!-- Linked List Interactive Diagram -->
+    <div class="viz-container">
+      <div class="viz-title">Linked List Interactive Diagram</div>
+      <div class="viz-subtitle">Each node has data and a next pointer. Try inserting and deleting nodes.</div>
+      <div class="ll-controls">
+        <button class="btn-primary" onclick="llInsertHead()">Insert Head</button>
+        <button class="btn-primary" onclick="llInsertTail()">Insert Tail</button>
+        <button class="btn-secondary" onclick="llDelete()">Delete Value</button>
+        <button class="btn-secondary" onclick="llReset()">Reset</button>
+      </div>
+      <div class="ll-display" id="llDisplay">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+
+    <!-- Code Blocks -->
+    <div style="margin-top:24px;">
+      <!-- node_struct.cpp -->
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">node_struct.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Node structure</span>
+<span class="syntax-keyword">struct</span> <span class="syntax-type">Node</span> {
+    <span class="syntax-keyword">int</span> data;
+    <span class="syntax-type">Node</span>* next;
+    <span class="syntax-type">Node</span>(<span class="syntax-keyword">int</span> val) {
+        data = val;
+        next = <span class="syntax-keyword">nullptr</span>;
+    }
+};
+
+<span class="syntax-comment">// LinkedList class with head pointer</span>
+<span class="syntax-keyword">class</span> <span class="syntax-type">LinkedList</span> {
+<span class="syntax-keyword">public</span>:
+    <span class="syntax-type">Node</span>* head;
+    <span class="syntax-type">LinkedList</span>() { head = <span class="syntax-keyword">nullptr</span>; }
+};</pre></div>
+
+      <!-- insert_and_display.cpp -->
+      <div class="code-header" style="margin-top:20px;">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">insert_and_display.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Insert at head — O(1)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">insertAtHead</span>(<span class="syntax-keyword">int</span> val) {
+    <span class="syntax-type">Node</span>* newNode = <span class="syntax-keyword">new</span> <span class="syntax-type">Node</span>(val);
+    newNode-&gt;next = head;
+    head = newNode;
+}
+
+<span class="syntax-comment">// Insert at tail — O(n)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">insertAtTail</span>(<span class="syntax-keyword">int</span> val) {
+    <span class="syntax-type">Node</span>* newNode = <span class="syntax-keyword">new</span> <span class="syntax-type">Node</span>(val);
+    <span class="syntax-keyword">if</span> (head == <span class="syntax-keyword">nullptr</span>) { head = newNode; <span class="syntax-keyword">return</span>; }
+    <span class="syntax-type">Node</span>* temp = head;
+    <span class="syntax-keyword">while</span> (temp-&gt;next != <span class="syntax-keyword">nullptr</span>) temp = temp-&gt;next;
+    temp-&gt;next = newNode;
+}
+
+<span class="syntax-comment">// Display list — O(n)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">display</span>() {
+    <span class="syntax-type">Node</span>* temp = head;
+    <span class="syntax-keyword">while</span> (temp != <span class="syntax-keyword">nullptr</span>) {
+        cout &lt;&lt; temp-&gt;data &lt;&lt; <span class="syntax-string">" -> "</span>;
+        temp = temp-&gt;next;
+    }
+    cout &lt;&lt; <span class="syntax-string">"NULL"</span> &lt;&lt; endl;
+}</pre></div>
+
+      <!-- delete.cpp -->
+      <div class="code-header" style="margin-top:20px;">
+        <div class="code-header-left">
+          <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+          <span class="code-filename">delete.cpp</span>
+        </div>
+        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy</button>
+      </div>
+      <div class="code-block"><pre><span class="syntax-comment">// Delete first node with given value — O(n)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">deleteByValue</span>(<span class="syntax-keyword">int</span> val) {
+    <span class="syntax-keyword">if</span> (head == <span class="syntax-keyword">nullptr</span>) <span class="syntax-keyword">return</span>;
+    <span class="syntax-comment">// Delete head</span>
+    <span class="syntax-keyword">if</span> (head-&gt;data == val) {
+        <span class="syntax-type">Node</span>* toDelete = head;
+        head = head-&gt;next;
+        <span class="syntax-keyword">delete</span> toDelete;
+        <span class="syntax-keyword">return</span>;
+    }
+    <span class="syntax-comment">// Find and delete</span>
+    <span class="syntax-type">Node</span>* temp = head;
+    <span class="syntax-keyword">while</span> (temp-&gt;next != <span class="syntax-keyword">nullptr</span> &amp;&amp; temp-&gt;next-&gt;data != val)
+        temp = temp-&gt;next;
+    <span class="syntax-keyword">if</span> (temp-&gt;next == <span class="syntax-keyword">nullptr</span>) {
+        cout &lt;&lt; <span class="syntax-string">"Value not found"</span> &lt;&lt; endl;
+        <span class="syntax-keyword">return</span>;
+    }
+    <span class="syntax-type">Node</span>* toDelete = temp-&gt;next;
+    temp-&gt;next = temp-&gt;next-&gt;next;
+    <span class="syntax-keyword">delete</span> toDelete;
+}</pre></div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTION 6: COMPLETE PROGRAM ===== -->
+  <section class="section" id="complete-program">
+    <h2 class="section-title">Question 6 — <span>Complete Program</span></h2>
+    <div class="title-underline"></div>
+    <p style="margin-bottom:20px;">Full C++ source code with all theory comments and implementations. Copy or download as .cpp file.</p>
+
+    <div class="cp-actions">
+      <button class="btn-primary" onclick="copyAllCode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        Copy All
+      </button>
+      <button class="btn-secondary" onclick="downloadCpp()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download .cpp
+      </button>
+      <span class="cp-filename">Hamza Maqsood_S2025376098.cpp</span>
+    </div>
+
+    <!-- Q1 Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>Q1: Arrays &amp; Searching</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-keyword">int</span> <span class="syntax-function">linearSearch</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> key) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; size; i++) {
+        <span class="syntax-keyword">if</span> (arr[i] == key) <span class="syntax-keyword">return</span> i;
+    }
+    <span class="syntax-keyword">return</span> -<span class="syntax-number">1</span>;
+}
+
+<span class="syntax-keyword">void</span> <span class="syntax-function">findMaxMin</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> &amp;maxVal, <span class="syntax-keyword">int</span> &amp;minVal) {
+    maxVal = arr[<span class="syntax-number">0</span>]; minVal = arr[<span class="syntax-number">0</span>];
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">1</span>; i &lt; size; i++) {
+        <span class="syntax-keyword">if</span> (arr[i] &gt; maxVal) maxVal = arr[i];
+        <span class="syntax-keyword">if</span> (arr[i] &lt; minVal) minVal = arr[i];
+    }
+}</pre></div>
+    </div>
+
+    <!-- Q2 Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>Q2: Bubble Sort</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-keyword">void</span> <span class="syntax-function">bubbleSort</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> &amp;swapCount) {
+    swapCount = <span class="syntax-number">0</span>;
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; size - <span class="syntax-number">1</span>; i++) {
+        <span class="syntax-keyword">bool</span> swapped = <span class="syntax-keyword">false</span>;
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; size - <span class="syntax-number">1</span> - i; j++) {
+            <span class="syntax-keyword">if</span> (arr[j] &gt; arr[j + <span class="syntax-number">1</span>]) {
+                <span class="syntax-keyword">int</span> temp = arr[j];
+                arr[j] = arr[j + <span class="syntax-number">1</span>];
+                arr[j + <span class="syntax-number">1</span>] = temp;
+                swapCount++; swapped = <span class="syntax-keyword">true</span>;
+            }
+        }
+        <span class="syntax-keyword">if</span> (!swapped) <span class="syntax-keyword">break</span>;
+    }
+}</pre></div>
+    </div>
+
+    <!-- Q3 Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>Q3: Binary Search</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-keyword">int</span> <span class="syntax-function">binarySearch</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> size, <span class="syntax-keyword">int</span> key, <span class="syntax-keyword">int</span> &amp;iterations) {
+    <span class="syntax-keyword">int</span> low = <span class="syntax-number">0</span>, high = size - <span class="syntax-number">1</span>;
+    iterations = <span class="syntax-number">0</span>;
+    <span class="syntax-keyword">while</span> (low &lt;= high) {
+        iterations++;
+        <span class="syntax-keyword">int</span> mid = low + (high - low) / <span class="syntax-number">2</span>;
+        <span class="syntax-keyword">if</span> (arr[mid] == key) <span class="syntax-keyword">return</span> mid;
+        <span class="syntax-keyword">else if</span> (arr[mid] &lt; key) low = mid + <span class="syntax-number">1</span>;
+        <span class="syntax-keyword">else</span> high = mid - <span class="syntax-number">1</span>;
+    }
+    <span class="syntax-keyword">return</span> -<span class="syntax-number">1</span>;
+}</pre></div>
+    </div>
+
+    <!-- Q4 Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>Q4: Complexity Analysis</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-comment">// Nested loop — O(n²)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">nestedLoop</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++)
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; n; j++) { <span class="syntax-comment">/* work */</span> }
+}
+
+<span class="syntax-comment">// Single loop — O(n)</span>
+<span class="syntax-keyword">void</span> <span class="syntax-function">singleLoop</span>(<span class="syntax-keyword">int</span> arr[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++) { <span class="syntax-comment">/* work */</span> }
+}
+
+<span class="syntax-comment">// Check if all elements of A exist in B — O(n²)</span>
+<span class="syntax-keyword">bool</span> <span class="syntax-function">allElementsExist</span>(<span class="syntax-keyword">int</span> A[], <span class="syntax-keyword">int</span> B[], <span class="syntax-keyword">int</span> n) {
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> i = <span class="syntax-number">0</span>; i &lt; n; i++) {
+        <span class="syntax-keyword">bool</span> found = <span class="syntax-keyword">false</span>;
+        <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> j = <span class="syntax-number">0</span>; j &lt; n; j++)
+            <span class="syntax-keyword">if</span> (A[i] == B[j]) { found = <span class="syntax-keyword">true</span>; <span class="syntax-keyword">break</span>; }
+        <span class="syntax-keyword">if</span> (!found) <span class="syntax-keyword">return</span> <span class="syntax-keyword">false</span>;
+    }
+    <span class="syntax-keyword">return</span> <span class="syntax-keyword">true</span>;
+}</pre></div>
+    </div>
+
+    <!-- Q5 Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>Q5: Linked List</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-keyword">struct</span> <span class="syntax-type">Node</span> {
+    <span class="syntax-keyword">int</span> data; <span class="syntax-type">Node</span>* next;
+    <span class="syntax-type">Node</span>(<span class="syntax-keyword">int</span> val) { data = val; next = <span class="syntax-keyword">nullptr</span>; }
+};
+
+<span class="syntax-keyword">class</span> <span class="syntax-type">LinkedList</span> {
+<span class="syntax-keyword">public</span>:
+    <span class="syntax-type">Node</span>* head;
+    <span class="syntax-type">LinkedList</span>() { head = <span class="syntax-keyword">nullptr</span>; }
+
+    <span class="syntax-keyword">void</span> <span class="syntax-function">insertAtHead</span>(<span class="syntax-keyword">int</span> val) {
+        <span class="syntax-type">Node</span>* n = <span class="syntax-keyword">new</span> <span class="syntax-type">Node</span>(val);
+        n-&gt;next = head; head = n;
+    }
+
+    <span class="syntax-keyword">void</span> <span class="syntax-function">insertAtTail</span>(<span class="syntax-keyword">int</span> val) {
+        <span class="syntax-type">Node</span>* n = <span class="syntax-keyword">new</span> <span class="syntax-type">Node</span>(val);
+        <span class="syntax-keyword">if</span> (!head) { head = n; <span class="syntax-keyword">return</span>; }
+        <span class="syntax-type">Node</span>* t = head;
+        <span class="syntax-keyword">while</span> (t-&gt;next) t = t-&gt;next;
+        t-&gt;next = n;
+    }
+
+    <span class="syntax-keyword">void</span> <span class="syntax-function">deleteByValue</span>(<span class="syntax-keyword">int</span> val) {
+        <span class="syntax-keyword">if</span> (!head) <span class="syntax-keyword">return</span>;
+        <span class="syntax-keyword">if</span> (head-&gt;data == val) {
+            <span class="syntax-type">Node</span>* d = head; head = head-&gt;next; <span class="syntax-keyword">delete</span> d; <span class="syntax-keyword">return</span>;
+        }
+        <span class="syntax-type">Node</span>* t = head;
+        <span class="syntax-keyword">while</span> (t-&gt;next &amp;&amp; t-&gt;next-&gt;data != val) t = t-&gt;next;
+        <span class="syntax-keyword">if</span> (!t-&gt;next) <span class="syntax-keyword">return</span>;
+        <span class="syntax-type">Node</span>* d = t-&gt;next; t-&gt;next = t-&gt;next-&gt;next; <span class="syntax-keyword">delete</span> d;
+    }
+
+    <span class="syntax-keyword">void</span> <span class="syntax-function">display</span>() {
+        <span class="syntax-type">Node</span>* t = head;
+        <span class="syntax-keyword">while</span> (t) { cout &lt;&lt; t-&gt;data &lt;&lt; <span class="syntax-string">" -> "</span>; t = t-&gt;next; }
+        cout &lt;&lt; <span class="syntax-string">"NULL"</span> &lt;&lt; endl;
+    }
+};</pre></div>
+    </div>
+
+    <!-- Main Collapsible -->
+    <div class="collapsible-header" onclick="toggleCollapse(this)">
+      <span class="chevron">&#9654;</span>
+      <span>main()</span>
+    </div>
+    <div class="collapsible-body">
+      <div class="code-block" style="border-radius:0 0 8px 8px;margin-bottom:12px;"><pre><span class="syntax-keyword">int</span> <span class="syntax-function">main</span>() {
+    <span class="syntax-comment">// Q1: Linear Search</span>
+    <span class="syntax-keyword">int</span> arr[] = {<span class="syntax-number">4</span>,<span class="syntax-number">15</span>,<span class="syntax-number">7</span>,<span class="syntax-number">23</span>,<span class="syntax-number">1</span>,<span class="syntax-number">9</span>,<span class="syntax-number">42</span>,<span class="syntax-number">18</span>,<span class="syntax-number">6</span>,<span class="syntax-number">30</span>};
+    <span class="syntax-keyword">int</span> result = <span class="syntax-function">linearSearch</span>(arr, <span class="syntax-number">10</span>, <span class="syntax-number">42</span>);
+    cout &lt;&lt; <span class="syntax-string">"42 found at index: "</span> &lt;&lt; result &lt;&lt; endl;
+
+    <span class="syntax-keyword">int</span> maxVal, minVal;
+    <span class="syntax-function">findMaxMin</span>(arr, <span class="syntax-number">10</span>, maxVal, minVal);
+    cout &lt;&lt; <span class="syntax-string">"Max: "</span> &lt;&lt; maxVal &lt;&lt; <span class="syntax-string">", Min: "</span> &lt;&lt; minVal &lt;&lt; endl;
+
+    <span class="syntax-comment">// Q2: Bubble Sort</span>
+    <span class="syntax-keyword">int</span> bArr[] = {<span class="syntax-number">64</span>,<span class="syntax-number">34</span>,<span class="syntax-number">25</span>,<span class="syntax-number">12</span>,<span class="syntax-number">22</span>,<span class="syntax-number">11</span>,<span class="syntax-number">90</span>};
+    <span class="syntax-keyword">int</span> swaps;
+    <span class="syntax-function">bubbleSort</span>(bArr, <span class="syntax-number">7</span>, swaps);
+    cout &lt;&lt; <span class="syntax-string">"Sorted: "</span>;
+    <span class="syntax-keyword">for</span> (<span class="syntax-keyword">int</span> x : bArr) cout &lt;&lt; x &lt;&lt; <span class="syntax-string">" "</span>;
+    cout &lt;&lt; <span class="syntax-string">"\nSwaps: "</span> &lt;&lt; swaps &lt;&lt; endl;
+
+    <span class="syntax-comment">// Q3: Binary Search</span>
+    <span class="syntax-keyword">int</span> sArr[] = {<span class="syntax-number">2</span>,<span class="syntax-number">5</span>,<span class="syntax-number">8</span>,<span class="syntax-number">12</span>,<span class="syntax-number">16</span>,<span class="syntax-number">23</span>,<span class="syntax-number">38</span>,<span class="syntax-number">45</span>,<span class="syntax-number">56</span>,<span class="syntax-number">72</span>};
+    <span class="syntax-keyword">int</span> iters;
+    <span class="syntax-keyword">int</span> found = <span class="syntax-function">binarySearch</span>(sArr, <span class="syntax-number">10</span>, <span class="syntax-number">23</span>, iters);
+    cout &lt;&lt; <span class="syntax-string">"23 found at: "</span> &lt;&lt; found &lt;&lt; <span class="syntax-string">", Iterations: "</span> &lt;&lt; iters &lt;&lt; endl;
+
+    <span class="syntax-comment">// Q4: Complexity</span>
+    <span class="syntax-keyword">int</span> A[] = {<span class="syntax-number">1</span>,<span class="syntax-number">2</span>,<span class="syntax-number">3</span>}, B[] = {<span class="syntax-number">3</span>,<span class="syntax-number">1</span>,<span class="syntax-number">2</span>};
+    cout &lt;&lt; <span class="syntax-string">"All A in B: "</span> &lt;&lt; (<span class="syntax-function">allElementsExist</span>(A, B, <span class="syntax-number">3</span>) ? <span class="syntax-string">"Yes"</span> : <span class="syntax-string">"No"</span>) &lt;&lt; endl;
+
+    <span class="syntax-comment">// Q5: Linked List</span>
+    <span class="syntax-type">LinkedList</span> list;
+    list.<span class="syntax-function">insertAtHead</span>(<span class="syntax-number">30</span>);
+    list.<span class="syntax-function">insertAtHead</span>(<span class="syntax-number">20</span>);
+    list.<span class="syntax-function">insertAtTail</span>(<span class="syntax-number">40</span>);
+    list.<span class="syntax-function">insertAtHead</span>(<span class="syntax-number">10</span>);
+    list.<span class="syntax-function">insertAtTail</span>(<span class="syntax-number">50</span>);
+    list.<span class="syntax-function">display</span>();
+
+    <span class="syntax-keyword">return</span> <span class="syntax-number">0</span>;
+}</pre></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  DSA Assignment Solutions — Hamza Maqsood — S2025376098
+</footer>
+
+
+<script>
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').style.display = 
+    document.getElementById('sidebar').classList.contains('open') ? 'block' : 'none';
+}
+
+// ===== SMOOTH SCROLL FOR NAV ITEMS =====
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').style.display = 'none';
+    }
+  });
+});
+
+// ===== SCROLL SPY =====
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+const observerOptions = { rootMargin: '-20% 0px -70% 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(item => item.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[data-section="${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, observerOptions);
+sections.forEach(section => observer.observe(section));
+
+// ===== TAB SWITCHING =====
+function switchTab(btn, tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('code-linear').style.display = tab === 'linear' ? 'block' : 'none';
+  document.getElementById('code-maxmin').style.display = tab === 'maxmin' ? 'block' : 'none';
+}
+
+// ===== COPY TO CLIPBOARD =====
+async function copyCode(btn) {
+  const codeBlock = btn.closest('.code-header').nextElementSibling.querySelector('pre');
+  const text = codeBlock.innerText;
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+    }, 2000);
+  } catch (err) {
+    console.error('Copy failed:', err);
+  }
+}
+
+// ===== COLLAPSIBLE SECTIONS =====
+function toggleCollapse(header) {
+  header.classList.toggle('active');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ===== COPY ALL CODE =====
+function copyAllCode() {
+  const allCode = document.querySelectorAll('#complete-program .code-block pre');
+  let fullText = '// Hamza Maqsood - S2025376098 - DSA Assignment Solutions\n\n';
+  allCode.forEach(pre => { fullText += pre.innerText + '\n\n'; });
+  navigator.clipboard.writeText(fullText).then(() => {
+    alert('All code copied to clipboard!');
+  });
+}
+
+// ===== DOWNLOAD .CPP =====
+function downloadCpp() {
+  const allCode = document.querySelectorAll('#complete-program .code-block pre');
+  let fullText = '// Hamza Maqsood - S2025376098 - DSA Assignment Solutions\n\n#include <iostream>\nusing namespace std;\n\n';
+  allCode.forEach(pre => { fullText += pre.innerText + '\n\n'; });
+  const blob = new Blob([fullText], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Hamza Maqsood_S2025376098.cpp';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ===== MEMORY GRID =====
+const memoryData = [
+  { value: 4, addr: '0x1000', idx: 0 },
+  { value: 15, addr: '0x1004', idx: 1 },
+  { value: 7, addr: '0x1008', idx: 2 },
+  { value: 23, addr: '0x100C', idx: 3 },
+  { value: 1, addr: '0x1010', idx: 4 },
+  { value: 9, addr: '0x1014', idx: 5 },
+  { value: 42, addr: '0x1018', idx: 6 },
+  { value: 18, addr: '0x101C', idx: 7 },
+  { value: 6, addr: '0x1020', idx: 8 },
+  { value: 30, addr: '0x1024', idx: 9 }
+];
+const memoryGrid = document.getElementById('memoryGrid');
+memoryData.forEach(cell => {
+  const div = document.createElement('div');
+  div.className = 'memory-cell';
+  div.innerHTML = `<div class="cell-value">${cell.value}</div><div class="cell-addr">${cell.addr}</div><div class="cell-index">[${cell.idx}]</div>`;
+  memoryGrid.appendChild(div);
+});
+
+// ===== BUBBLE SORT VISUALIZATION =====
+let bubbleArray = [64, 34, 25, 12, 22, 11, 90];
+const bubbleOriginal = [...bubbleArray];
+let bubbleSorting = false;
+let bubblePass = 0;
+let bubbleSwapCount = 0;
+
+function renderBubbleChart() {
+  const chart = document.getElementById('bubbleChart');
+  chart.innerHTML = '';
+  const maxVal = Math.max(...bubbleArray);
+  bubbleArray.forEach((val, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'bar-wrapper';
+    const bar = document.createElement('div');
+    bar.className = 'bar unsorted';
+    bar.id = `bubble-bar-${i}`;
+    bar.style.height = `${(val / maxVal) * 160}px`;
+    bar.textContent = val;
+    const idx = document.createElement('div');
+    idx.className = 'bar-index';
+    idx.textContent = `[${i}]`;
+    wrapper.appendChild(bar);
+    wrapper.appendChild(idx);
+    chart.appendChild(wrapper);
+  });
+}
+renderBubbleChart();
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function playBubbleSort() {
+  if (bubbleSorting) return;
+  bubbleSorting = true;
+  document.getElementById('bubblePlay').disabled = true;
+  const n = bubbleArray.length;
+  bubblePass = 0;
+  bubbleSwapCount = 0;
+
+  for (let i = 0; i < n - 1; i++) {
+    bubblePass++;
+    document.getElementById('bubblePass').textContent = bubblePass;
+    let swapped = false;
+    for (let j = 0; j < n - 1 - i; j++) {
+      // Highlight comparing pair
+      const barJ = document.getElementById(`bubble-bar-${j}`);
+      const barJ1 = document.getElementById(`bubble-bar-${j + 1}`);
+      if (barJ) barJ.className = 'bar comparing';
+      if (barJ1) barJ1.className = 'bar comparing';
+      await sleep(600);
+
+      if (bubbleArray[j] > bubbleArray[j + 1]) {
+        // Swap
+        if (barJ) barJ.className = 'bar swapping';
+        if (barJ1) barJ1.className = 'bar swapping';
+        await sleep(400);
+        const temp = bubbleArray[j];
+        bubbleArray[j] = bubbleArray[j + 1];
+        bubbleArray[j + 1] = temp;
+        bubbleSwapCount++;
+        document.getElementById('bubbleSwaps').textContent = bubbleSwapCount;
+        renderBubbleChart();
+        // Re-highlight after render
+        const newBarJ = document.getElementById(`bubble-bar-${j}`);
+        const newBarJ1 = document.getElementById(`bubble-bar-${j + 1}`);
+        if (newBarJ) newBarJ.className = 'bar swapping';
+        if (newBarJ1) newBarJ1.className = 'bar swapping';
+        await sleep(400);
+        swapped = true;
+      }
+      // Reset to unsorted (unless this position is now sorted)
+      const sortedStart = n - 1 - i;
+      for (let k = 0; k < n; k++) {
+        const bar = document.getElementById(`bubble-bar-${k}`);
+        if (!bar) continue;
+        if (k >= sortedStart) bar.className = 'bar sorted';
+        else if (k !== j && k !== j + 1) bar.className = 'bar unsorted';
+      }
+    }
+    // Mark the last element of this pass as sorted
+    const lastBar = document.getElementById(`bubble-bar-${n - 1 - i}`);
+    if (lastBar) lastBar.className = 'bar sorted';
+    if (!swapped) break;
+  }
+  // Mark all as sorted
+  for (let k = 0; k < n; k++) {
+    const bar = document.getElementById(`bubble-bar-${k}`);
+    if (bar) bar.className = 'bar sorted';
+  }
+  bubbleSorting = false;
+  document.getElementById('bubblePlay').disabled = false;
+}
+
+function resetBubbleSort() {
+  bubbleSorting = false;
+  bubbleArray = [...bubbleOriginal];
+  bubblePass = 0;
+  bubbleSwapCount = 0;
+  document.getElementById('bubblePass').textContent = '0';
+  document.getElementById('bubbleSwaps').textContent = '0';
+  document.getElementById('bubblePlay').disabled = false;
+  renderBubbleChart();
+}
+
+// ===== BINARY SEARCH VISUALIZATION =====
+const bsArray = [2, 5, 8, 12, 16, 23, 38, 45, 56, 72];
+let bsIterations = 0;
+let bsSearching = false;
+
+function renderBSCells() {
+  const container = document.getElementById('bsCells');
+  container.innerHTML = '';
+  bsArray.forEach((val, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'bs-cell';
+    cell.id = `bs-cell-${i}`;
+    cell.innerHTML = `<div class="bs-value">${val}</div><div class="bs-index">[${i}]</div>`;
+    container.appendChild(cell);
+  });
+}
+renderBSCells();
+
+async function playBinarySearch() {
+  if (bsSearching) return;
+  bsSearching = true;
+  renderBSCells();
+  bsIterations = 0;
+  document.getElementById('bsIterations').textContent = '0';
+
+  const key = parseInt(document.getElementById('bsKey').value);
+  let low = 0, high = bsArray.length - 1;
+
+  while (low <= high) {
+    bsIterations++;
+    document.getElementById('bsIterations').textContent = bsIterations;
+
+    // Clear previous states
+    for (let i = 0; i < bsArray.length; i++) {
+      const c = document.getElementById(`bs-cell-${i}`);
+      if (c) { c.className = 'bs-cell'; }
+    }
+
+    const mid = Math.floor(low + (high - low) / 2);
+
+    // Highlight low, mid, high
+    const lowCell = document.getElementById(`bs-cell-${low}`);
+    const midCell = document.getElementById(`bs-cell-${mid}`);
+    const highCell = document.getElementById(`bs-cell-${high}`);
+    if (lowCell) lowCell.classList.add('low');
+    if (midCell) midCell.classList.add('mid');
+    if (highCell && high !== low) highCell.classList.add('high');
+
+    await sleep(1000);
+
+    if (bsArray[mid] === key) {
+      if (midCell) midCell.className = 'bs-cell found';
+      bsSearching = false;
+      return;
+    } else if (bsArray[mid] < key) {
+      // Eliminate left half
+      for (let i = low; i <= mid; i++) {
+        const c = document.getElementById(`bs-cell-${i}`);
+        if (c) c.classList.add('eliminated');
+      }
+      low = mid + 1;
+    } else {
+      // Eliminate right half
+      for (let i = mid; i <= high; i++) {
+        const c = document.getElementById(`bs-cell-${i}`);
+        if (c) c.classList.add('eliminated');
+      }
+      high = mid - 1;
+    }
+    await sleep(600);
+  }
+  bsSearching = false;
+}
+
+function resetBinarySearch() {
+  bsSearching = false;
+  bsIterations = 0;
+  document.getElementById('bsIterations').textContent = '0';
+  renderBSCells();
+}
+
+// ===== LINKED LIST =====
+let linkedList = [10, 20, 30, 40, 50];
+let llIdCounter = 100;
+
+function renderLinkedList() {
+  const display = document.getElementById('llDisplay');
+  display.innerHTML = '<div class="ll-head-label">HEAD</div>';
+
+  linkedList.forEach((val, i) => {
+    const node = document.createElement('div');
+    node.className = 'll-node';
+    node.style.animationDelay = `${i * 50}ms`;
+    const isLast = i === linkedList.length - 1;
+    node.innerHTML = `
+      <div class="ll-node-data">${val}</div>
+      <div class="ll-node-next ${isLast ? 'null' : ''}">${isLast ? '&#8709;' : '&#8594;'}</div>
+      ${!isLast ? '<div class="ll-arrow">&#8594;</div>' : '<div class="ll-null-label">NULL</div>'}
+    `;
+    display.appendChild(node);
+  });
+
+  if (linkedList.length === 0) {
+    display.innerHTML += '<div class="ll-null-label" style="margin-left:16px;">EMPTY</div>';
+  }
+}
+renderLinkedList();
+
+function llInsertHead() {
+  const val = Math.floor(Math.random() * 90) + 10;
+  linkedList.unshift(val);
+  renderLinkedList();
+}
+
+function llInsertTail() {
+  const val = Math.floor(Math.random() * 90) + 10;
+  linkedList.push(val);
+  renderLinkedList();
+}
+
+function llDelete() {
+  if (linkedList.length === 0) return;
+  const val = parseInt(prompt('Enter value to delete:'));
+  if (isNaN(val)) return;
+  const idx = linkedList.indexOf(val);
+  if (idx !== -1) {
+    linkedList.splice(idx, 1);
+    renderLinkedList();
+  } else {
+    alert('Value not found in list!');
+  }
+}
+
+function llReset() {
+  linkedList = [10, 20, 30, 40, 50];
+  renderLinkedList();
+}
+</script>
+</body>
+</html>
